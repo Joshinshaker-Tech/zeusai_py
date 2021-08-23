@@ -1,5 +1,5 @@
-# ZeusAI SDK
-The development kit for ZeusAI plugins and clients.
+# ZeusAI.Py
+The python package to wrap the various APIs associated with ZeusAI.
 
 ## Usage for Non-Contributors
 See the Readthedocs page (TODO) for usage documentation.

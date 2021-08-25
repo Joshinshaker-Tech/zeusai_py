@@ -43,6 +43,12 @@ def _get_response() -> dict:
         else:
             raise exceptions.PluginError
     else:  # If it's not an error:
+        # Verify the validity of the response.
+        try:
+            _ = response["endpoint"]
+            _ = response["params"]
+        except KeyError:
+            raise exceptions.InvalidResponse
         return response
 
 
@@ -70,6 +76,8 @@ def followup(question: str) -> None:
     :return:
     """
     _send_request("followup", question)
+    response = _get_response()
+    return response["params"]
 
 
 def simulate_client() -> client.Client:

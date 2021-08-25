@@ -43,6 +43,12 @@ def _get_response() -> dict:
         else:
             raise exceptions.PluginError
     else:  # If it's not an error:
+        # Verify the validity of the response.
+        try:
+            _ = response["endpoint"]
+            _ = response["params"]
+        except KeyError:
+            raise exceptions.InvalidResponse
         return response
 
 
@@ -52,7 +58,7 @@ def variable(variables: list) -> dict:
     :param variables: List of variables to get the values of
     :type variables: List
 
-    :raise: Everything in _get_response(), AND:
+    :raise: See _get_response().
     :return: Dictionary, containing {key: value} pairs: {variable_name: value}
     """
     _send_request("variable", variables)
@@ -60,12 +66,18 @@ def variable(variables: list) -> dict:
     return response["params"]
 
 
-def followup() -> None:
-    """
-    :raise:
+def followup(question: str) -> None:
+    """ Ask the user a followup question, and get their response.
+
+    :param question: The question to ask the user.
+    :type question: String
+
+    :raise: See _get_response().
     :return:
     """
-    pass
+    _send_request("followup", question)
+    response = _get_response()
+    return response["params"]
 
 
 def simulate_client() -> client.Client:
@@ -75,7 +87,7 @@ def simulate_client() -> client.Client:
     NOTE: THIS IS IRREVERSIBLE! ONCE THE PLUGIN IS USING THE CLIENT API, IT CANNOT
     GO BACK TO THE PLUGIN API.
 
-    :raise:
+    :raise: See _get_response().
     :return: Instance of Client
     """
     _send_request("simulate client", "")

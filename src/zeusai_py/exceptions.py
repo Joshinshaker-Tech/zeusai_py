@@ -16,3 +16,7 @@ class InvalidParams(PluginError):
 
 class ForbiddenInStandalone(PluginError):
     pass
+
+
+class InvalidResponse(PluginError):
+    pass

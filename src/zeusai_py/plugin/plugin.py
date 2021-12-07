@@ -1,8 +1,8 @@
 import json
 import sys
 
-import client
-import exceptions
+from src.zeusai_py.io import client
+from src.zeusai_py import exceptions
 
 
 def _send_request(endpoint: str, params) -> None:

@@ -3,6 +3,12 @@ name = "zeusai_sdk"
 version = "0.1.0"
 description = ""
 authors = ["JMT <contact@joshinshaker.com>"]
+keywords = []
+readme = "docs/README.md"
+license = ""
+homepage = "https://github.com/joshinshaker-tech/zeusai_py"
+repository = "https://github.com/joshinshaker-tech/zeusai_py"
+include = []
 
 [tool.poetry.dependencies]
 python = "^3.8"

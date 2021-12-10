@@ -1,7 +1,7 @@
 name: Build
 
 on:
-  #
+  # TODO - Run on tag creation in branches starting with release/
 
 jobs:
   tests:
@@ -20,6 +20,8 @@ jobs:
 
       - name: Install Packages
         run: poetry install --no-dev
+
+        # TODO - Make this change the version in pyproject.toml to the name of the tag
 
       - name: Build
         run: poetry build

@@ -1,5 +1,5 @@
 """
-When the IO package is run on it's own, it runs a basic interactive CLI.
+When the IO package is run on its own, it runs a basic interactive CLI.
 This __main__ module also works as an example of a basic client for other developers
 """
 from zeusai_py import io

@@ -1,6 +1,7 @@
 import socket
 import json
 import threading
+from zeusai_py.io import _socket_io
 
 
 class Client:
@@ -16,6 +17,7 @@ class Client:
         self.port = port
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn.connect((self.host, self.port))
+        self.reader = _socket_io.SocketStreamReader(self.conn)
         self.output_func = None
         self.recv_thread = threading.Thread(target=self._recv_loop)
 
@@ -26,7 +28,8 @@ class Client:
         :param password:
         :return:
         """
-        pass
+        request_dict = {"endpoint": "auth", "params": {"user": username, "pass": password}}
+        self._send_request(request_dict)
 
     def input(self, input_: str) -> None:
         """ Provide an input to the AI
@@ -47,8 +50,9 @@ class Client:
         self.output_func = func
 
     def _get_response(self) -> dict:
-        # TODO - make _get response func
-        pass
+        response = self.reader.readline()
+        response = json.loads(response)
+        return response
 
     def _send_request(self, request_dict: dict) -> None:
         """Serializes request_dict into a JSON bytes object and sends it to the server.
@@ -56,7 +60,8 @@ class Client:
         :param request_dict: Dictionary containing a valid request for the ZeusAI Server API
         :return: None
         """
-        serialized_json = json.dumps(request_dict).encode("utf8")
+        serialized_json = json.dumps(request_dict) + "\n"
+        serialized_json = serialized_json.encode("utf8")
         self.conn.sendall(serialized_json)
 
     def _recv_loop(self) -> None:

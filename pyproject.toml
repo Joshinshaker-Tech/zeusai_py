@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "zeusai_sdk"
+name = "zeusai_py"
 version = "0.0.1"
 description = ""
 authors = ["JMT <contact@joshinshaker.com>"]

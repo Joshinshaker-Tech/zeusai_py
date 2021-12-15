@@ -1,5 +1,5 @@
-IO API
-=====================
+IO API Reference
+================
 ZeusAI.py's IO API is used for interacting with the ZeusAI server I/O API.
 It can be found in the zeusai\_py.io subpackage.
 
@@ -16,7 +16,7 @@ Client
 
 
 IO Exceptions
--------------------------------
+-------------
 
 .. automodule:: zeusai_py.io.exceptions
    :members:

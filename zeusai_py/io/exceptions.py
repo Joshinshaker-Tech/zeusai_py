@@ -2,7 +2,56 @@ from zeusai_py import exceptions
 
 
 class IOException(exceptions.ZeusAIException):
-    """ The Base exception for all IO module related exceptions"""
+    """
+    The Base exception for all IO module related exceptions
+    """
+    pass
+
+
+class InvalidEndpoint(IOException):
+    """
+    The client attempted to access a non-existent endpoint is invalid.
+    """
+    pass
+
+
+class InvalidParams(IOException):
+    """
+    The params provided to an endpoint are incorrect. This may be that they are the wrong
+    params for the endpoint called, or that they have the wrong type.
+    """
+    pass
+
+
+class InvalidJSON(IOException):
+    """
+    The request received by the server is not in a valid JSON format.
+    """
+    pass
+
+
+class Forbidden(IOException):
+    """
+    The client did not authenticate with the server before calling
+    a secure endpoint.
+    """
+    pass
+
+
+class AuthTimeout(IOException):
+    """
+    The client failed to successfully authenticate in the allotted number
+    of attempts. This is a fatal exception and the connection will be closed
+    after it is raised.
+    """
+    pass
+
+
+class AuthFailed(IOException):
+    """
+    The username and/or password provided to the authentication endpoint
+    are incorrect.
+    """
     pass
 
 

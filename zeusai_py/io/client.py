@@ -75,3 +75,6 @@ class Client:
             response = self._get_response()
             if response["endpoint"] == "output":
                 self.output_func(response["params"])
+            elif response["endpoint"] == "error":
+                # TODO - Raise exceptions for various errors
+                pass

@@ -2,6 +2,7 @@ import socket
 import json
 import threading
 from zeusai_py.io import _socket_io
+from zeusai_py.io import exceptions
 
 
 class Client:
@@ -32,6 +33,7 @@ class Client:
         :param password: The password to use for authentication with the server
         :return: None
         """
+        # TODO - Figure out how to deal with authentication errors.
         request_dict = {"endpoint": "auth", "params": {"user": username, "pass": password}}
         self._send_request(request_dict)
 
@@ -76,5 +78,19 @@ class Client:
             if response["endpoint"] == "output":
                 self.output_func(response["params"])
             elif response["endpoint"] == "error":
-                # TODO - Raise exceptions for various errors
-                pass
+                original_request = response["params"]["original_request"]
+                error = response["params"]["error"]
+                if error == "invalid endpoint":
+                    raise exceptions.InvalidEndpoint(f"The endpoint in request {original_request} is invalid")
+                elif error == "invalid params":
+                    raise exceptions.InvalidParams(f"The params included in request {original_request} are invalid")
+                elif error == "invalid json":
+                    raise exceptions.InvalidJSON(f"The server returned an invalid JSON error because a request was not sent in the form of a valid JSON.")
+                elif error == "not implemented":
+                    pass
+                elif error == "forbidden":
+                    raise exceptions.Forbidden(f"")
+                    # TODO - write a message
+                elif error == "auth timeout":
+                    raise exceptions.AuthTimeout(f"")
+                    # TODO - write a message

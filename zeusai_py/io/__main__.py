@@ -1,6 +1,6 @@
 """
-When the IO module is run directly, it launches a basic interactive CLI client
-.
+When the IO module is run directly, it launches a basic interactive CLI client.
+
 The __main__ module also works as a good example of a simple client for other developers
 to begin their plugins from.
 """
@@ -13,7 +13,7 @@ def output(ai_out: str):
     print(ai_out)
 
 
-def main():
+def main() -> None:
     host = input("ZeusAI Server Host (localhost):")
     port = int(input("ZeusAI Server Port (9387):"))
 
@@ -29,10 +29,9 @@ def main():
     # Authenticate
     username = input("Username: ")
     password = getpass.getpass()
+    client_.set_output_func(output)
     client_.authenticate(username, password)
 
-    client_.set_output_func(output)
-    client_.recv_thread.start()
     while True:
         user_input = input("Input: ")
         client_.input(user_input)

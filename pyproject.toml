@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "zeusai_sdk"
-version = "0.1.0"
+name = "zeusai_py"
+version = "0.0.1.1"
 description = ""
 authors = ["JMT <contact@joshinshaker.com>"]
 keywords = []
@@ -11,7 +11,7 @@ repository = "https://github.com/joshinshaker-tech/zeusai_py"
 include = []
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 
 [tool.poetry.dev-dependencies]
 black = "^21.7b0"
@@ -19,6 +19,7 @@ flake8 = "^3.9.2"
 isort = "^5.9.3"
 pytest = "^6.2.4"
 pre-commit = "^2.13.0"
+sphinx = "^4.0.2"
 
 [tool.black]
 line-length = 100

@@ -4,7 +4,7 @@ When the IO module is run directly, it launches a basic interactive CLI client.
 The __main__ module also works as a good example of a simple client for other developers
 to begin their plugins from.
 """
-from zeusai_py.io import client
+from . import client
 import getpass
 
 

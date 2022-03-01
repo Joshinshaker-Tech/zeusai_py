@@ -1,4 +1,5 @@
 """
-ZeusAI.py is the python wrapper for ZeusAI's APIs, intended to make developing plugins and clients
-simple.
+The python wrapper for the ZeusAI I/O API.
+
+Running the io module directly will put you into a basic command-line based client.
 """

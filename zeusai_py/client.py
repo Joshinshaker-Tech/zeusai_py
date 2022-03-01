@@ -1,8 +1,8 @@
 import socket
 import json
 import threading
-from zeusai_py.io import _socket_io
-from zeusai_py.io import exceptions
+from . import _socket_io
+from . import exceptions
 
 
 class Client:

@@ -1,5 +1,5 @@
 import socket
-from zeusai_py.io import exceptions
+from . import exceptions
 
 
 # Source: https://stackoverflow.com/a/65637828/13800487

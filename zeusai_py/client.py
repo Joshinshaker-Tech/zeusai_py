@@ -1,7 +1,8 @@
 import socket
 import json
 import threading
-from zeusai_py.io import _socket_io
+from . import _socket_io
+from . import exceptions
 
 
 class Client:
@@ -34,6 +35,11 @@ class Client:
         """
         request_dict = {"endpoint": "auth", "params": {"user": username, "pass": password}}
         self._send_request(request_dict)
+        response = self._get_response()
+        if response["endpoint"] == "auth" and response["params"] == "success":
+            self.recv_thread.start()
+        elif response["endpoint"] == "ERROR":
+            self._process_errors(response)
 
     def input(self, input_: str) -> None:
         """ Provide an input from the user for the AI to process and respond to.
@@ -53,11 +59,6 @@ class Client:
         """
         self.output_func = func
 
-    def _get_response(self) -> dict:
-        response = self.reader.readline()
-        response = json.loads(response)
-        return response
-
     def _send_request(self, request_dict: dict) -> None:
         """ Serializes request_dict into a JSON bytes object and sends it to the server.
 
@@ -68,6 +69,49 @@ class Client:
         serialized_json = serialized_json.encode("utf8")
         self.conn.sendall(serialized_json)
 
+    def _get_response(self) -> dict:
+        response = self.reader.readline()
+        response = json.loads(response)
+        return response
+
+    @staticmethod
+    def _process_errors(response: dict) -> None:
+        """Process an ERROR request and raise the correct exceptions for the error returned.
+
+        :param response: The request dict as returned by Client._get_response()
+        :return: None
+        """
+        error = response["params"]["error"]
+        original_request = response["params"]["original_request"]
+        if error == "invalid endpoint":
+            raise exceptions.InvalidEndpoint(
+                f"The endpoint in this request is invalid: {original_request}"
+            )
+        elif error == "invalid params":
+            raise exceptions.InvalidParams(
+                f"The params included in this request are invalid: {original_request}"
+            )
+        elif error == "invalid json":
+            raise exceptions.InvalidJSON(
+                f"The server returned an invalid JSON error because a request was not sent in the form of a valid JSON."
+            )
+        elif error == "not implemented":
+            raise NotImplementedError(
+                f"The endpoint accessed in the following request has not yet been implemented: {original_request} "
+            )
+        elif error == "forbidden":
+            raise exceptions.Forbidden(
+                f"You must authenticate with the server before accessing this endpoint: {original_request}"
+            )
+        elif error == "auth timeout":
+            raise exceptions.AuthTimeout(
+                f"This client has failed to authenticate too many times, and has been disconnected."
+            )
+        else:
+            raise exceptions.IOException(
+                f"The server returned an unknown error because of the following request: {original_request}. Raw Error: {response}"
+            )
+
     def _recv_loop(self) -> None:
         """ Loop which runs in a thread to get output from the AI server.
         Takes a set of functions which are called when the associated endpoint is called."""
@@ -75,3 +119,5 @@ class Client:
             response = self._get_response()
             if response["endpoint"] == "output":
                 self.output_func(response["params"])
+            elif response["endpoint"] == "ERROR":
+                self._process_errors(response)

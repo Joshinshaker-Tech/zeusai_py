@@ -15,13 +15,14 @@ def output(ai_out: str):
 
 def main() -> None:
     host = input("ZeusAI Server Host (localhost):")
-    port = int(input("ZeusAI Server Port (9387):"))
+    port = input("ZeusAI Server Port (9387):")
 
     # Default host and port
-    if host is None:
+    if not host:
         host = "127.0.0.1"
-    if port is None:
+    if not port:
         port = "9387"
+    port = int(port)
 
     # Actual Client Code - Very simple to use.
     client_ = client.Client(host, port)
